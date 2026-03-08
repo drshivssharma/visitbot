@@ -8,7 +8,7 @@ Author: Built for visiting nephrologist/intensivist workflow
 import os, json, re, asyncio, io, logging
 from datetime import datetime, date
 import gspread
-import google.generativeai as genai
+from google import genai
 from PIL import Image
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
