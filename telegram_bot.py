@@ -136,7 +136,7 @@ routineOnly=true only if zero key events."""
 def extract_from_image(image_bytes):
     img = Image.open(io.BytesIO(image_bytes))
     response = gemini_client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.0-flash-lite",
         contents=[EXTRACT_PROMPT, img]
     )
     text = response.text.strip()
