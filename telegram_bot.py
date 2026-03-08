@@ -120,8 +120,7 @@ def is_duplicate(entry: dict, records: list) -> bool:
 # ─────────────────────────────────────────────────────────────────────────────
 # GEMINI EXTRACTION
 # ─────────────────────────────────────────────────────────────────────────────
-genai.configure(api_key=GEMINI_API_KEY)
-gemini = genai.GenerativeModel("models/gemini-2.0-flash")
+gemini = genai.Client(api_key=GEMINI_API_KEY)
 
 EXTRACT_PROMPT = """You are a Medical Visit Documentation Assistant for a visiting nephrologist/intensivist who sees 10–25 patients daily.
 
@@ -159,8 +158,11 @@ Today's date: """ + date.today().strftime("%d/%m/%Y")
 async def extract_from_image(image_bytes: bytes) -> list:
     """Sends image to Gemini Flash and returns list of extracted patient dicts."""
     img = Image.open(io.BytesIO(image_bytes))
-    response = gemini.generate_content([EXTRACT_PROMPT, img])
-    text = response.text.strip()
+    response = gemini.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[EXTRACT_PROMPT, img]
+)
+text = response.text.strip()
     # Strip markdown if present
     text = re.sub(r"```json|```", "", text).strip()
     return json.loads(text)
