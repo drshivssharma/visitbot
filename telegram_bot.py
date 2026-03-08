@@ -101,7 +101,7 @@ def is_duplicate(entry, records):
     return False
 
 # GEMINI
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+GEMINI_MODEL = "gemini-2.5-flash"
 
 EXTRACT_PROMPT = """You are a Medical Visit Documentation Assistant for a visiting nephrologist/intensivist.
 
@@ -134,12 +134,20 @@ For EACH patient visible extract:
 routineOnly=true only if zero key events."""
 
 def extract_from_image(image_bytes):
-    img = Image.open(io.BytesIO(image_bytes))
-    response = gemini_client.models.generate_content(
-        model="gemini-3-flash-preview",
-        contents=[EXTRACT_PROMPT, img]
-    )
-    text = response.text.strip()
+    import base64
+    b64 = base64.b64encode(image_bytes).decode("utf-8")
+    url = f"https://generativelanguage.googleapis.com/v1/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+    payload = {
+        "contents": [{
+            "parts": [
+                {"text": EXTRACT_PROMPT},
+                {"inline_data": {"mime_type": "image/jpeg", "data": b64}}
+            ]
+        }]
+    }
+    r = req.post(url, json=payload, timeout=30)
+    r.raise_for_status()
+    text = r.json()["candidates"][0]["content"]["parts"][0]["text"]
     text = re.sub(r"```json|```", "", text).strip()
     return json.loads(text)
 
