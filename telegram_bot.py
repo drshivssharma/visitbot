@@ -121,7 +121,7 @@ def is_duplicate(entry: dict, records: list) -> bool:
 # GEMINI EXTRACTION
 # ─────────────────────────────────────────────────────────────────────────────
 genai.configure(api_key=GEMINI_API_KEY)
-gemini = genai.GenerativeModel("gemini-1.5-flash")
+gemini = genai.GenerativeModel("gemini-2.0-flash")
 
 EXTRACT_PROMPT = """You are a Medical Visit Documentation Assistant for a visiting nephrologist/intensivist who sees 10–25 patients daily.
 
