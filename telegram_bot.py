@@ -6,7 +6,7 @@ import os, json, re, logging, io
 from datetime import datetime, date
 import gspread
 from PIL import Image
-from google import genai
+import requests as req
 from google.oauth2.service_account import Credentials
 from telegram import Update
 from telegram.ext import (
