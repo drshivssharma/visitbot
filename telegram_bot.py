@@ -179,7 +179,23 @@ def next_photo_ref():
 # AUTHORIZATION CHECK
 # ─────────────────────────────────────────────────────────────────────────────
 def authorized(update: Update) -> bool:
+    logger.info(f"Message from chat_id: {update.effective_chat.id} | authorized_id: {AUTHORIZED_CHAT_ID}")
     return update.effective_chat.id == AUTHORIZED_CHAT_ID
+```
+
+6. Click **Commit changes**
+
+---
+
+## Step 2 — Send /start Again
+
+Once Railway redeploys (wait for `Bot started — polling…` in logs):
+1. Send `/start` to your bot on Telegram
+2. Immediately go to Railway **Logs** tab
+
+You will see a line like:
+```
+Message from chat_id: XXXXXXXXX | authorized_id: 6190782543
 
 # ─────────────────────────────────────────────────────────────────────────────
 # BOT HANDLERS
