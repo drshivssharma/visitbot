@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 def extract_from_image(image_bytes):
     b64 = base64.b64encode(image_bytes).decode("utf-8")
     url = (
-        f"https://generativelanguage.googleapis.com/v1/models/"
+        f"https://generativelanguage.googleapis.com/v1beta/models/"
         f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
     )
     payload = {
