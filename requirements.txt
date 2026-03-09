@@ -1,5 +1,4 @@
 python-telegram-bot==21.5
-google-genai
 gspread==6.0.2
 google-auth==2.27.0
 Pillow
