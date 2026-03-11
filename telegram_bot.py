@@ -70,7 +70,7 @@ def extract_from_image(image_bytes):
             "content-type": "application/json"
         },
         json={
-            "model": "claude-haiku-4-5-20251001",
+            "model": os.environ.get("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001"),
             "max_tokens": 2048,
             "messages": [{
                 "role": "user",
