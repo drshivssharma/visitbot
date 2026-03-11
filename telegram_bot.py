@@ -236,7 +236,7 @@ def append_visit(entry, photo_ref):
         entry.get("referredBy", ""),
         entry.get("diagnosis", ""),
         entry.get("clinicalNotes", ""),
-        entry.get("treatmentGiven", ""),
+        ("; ".join(entry.get("treatmentGiven", [])) if isinstance(entry.get("treatmentGiven"), list) else entry.get("treatmentGiven", "")),
         "; ".join(entry.get("investigationsOrdered") or []),
         "; ".join(entry.get("keyFindings") or []),
         procs,
