@@ -137,7 +137,7 @@ def call_claude(image_bytes, prompt):
     return text
 ```
 
-Commit → redeploy → send a photo.
+
 
 ---
 
