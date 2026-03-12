@@ -136,7 +136,7 @@ def call_claude(image_bytes, prompt):
     text = re.sub(r"```json|```", "", text).strip()
     return text
     
-**Also add to Railway Variables:**
+
 ```
 GEMINI_MODEL = gemini-2.0-flash-lite
 
