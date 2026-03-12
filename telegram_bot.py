@@ -137,7 +137,6 @@ def call_claude(image_bytes, prompt):
     return text
     
 
-```
 GEMINI_MODEL = gemini-2.0-flash-lite
 
 def extract_visit(image_bytes):
