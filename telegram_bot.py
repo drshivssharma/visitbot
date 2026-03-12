@@ -112,42 +112,40 @@ Return ONLY a valid JSON object. No markdown, no backticks.
 # CLAUDE API
 # ─────────────────────────────────────────────────────────────────────────────
 
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+GEMINI_MODEL   = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash-lite")
+
 def call_claude(image_bytes, prompt):
     b64 = base64.b64encode(image_bytes).decode("utf-8")
-    response = requests.post(
-        "https://api.anthropic.com/v1/messages",
-        headers={
-            "x-api-key": ANTHROPIC_API_KEY,
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json"
-        },
-        json={
-            "model": ANTHROPIC_MODEL,
-            "max_tokens": 3000,
-            "messages": [{
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": "image/jpeg",
-                            "data": b64
-                        }
-                    },
-                    {"type": "text", "text": prompt}
-                ]
-            }]
-        },
-        timeout=45
-    )
-    logger.info(f"Claude API status: {response.status_code}")
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+    payload = {
+        "contents": [{
+            "parts": [
+                {"text": prompt},
+                {"inline_data": {"mime_type": "image/jpeg", "data": b64}}
+            ]
+        }],
+        "generationConfig": {"maxOutputTokens": 3000}
+    }
+    response = requests.post(url, json=payload, timeout=45)
+    logger.info(f"Gemini API status: {response.status_code}")
     if response.status_code != 200:
-        logger.error(f"Claude error: {response.text}")
-        raise Exception(f"Claude API {response.status_code}: {response.text[:200]}")
-    text = response.json()["content"][0]["text"]
+        logger.error(f"Gemini error: {response.text}")
+        raise Exception(f"Gemini API {response.status_code}: {response.text[:200]}")
+    text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
     text = re.sub(r"```json|```", "", text).strip()
     return text
+```
+
+Commit → redeploy → send a photo.
+
+---
+
+The function is still called `call_claude` internally — no other changes needed anywhere. Everything else stays identical.
+
+**Also add to Railway Variables:**
+```
+GEMINI_MODEL = gemini-2.0-flash-lite
 
 def extract_visit(image_bytes):
     text = call_claude(image_bytes, VISIT_PROMPT)
