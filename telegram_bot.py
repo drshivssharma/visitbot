@@ -195,6 +195,8 @@ def get_gc():
 def get_or_create_sheet(sh, title, headers):
     try:
         ws = sh.worksheet(title)
+        if ws.row_count < 1000:
+            ws.add_rows(5000)
     except gspread.WorksheetNotFound:
         ws = sh.add_worksheet(title=title, rows=5000, cols=len(headers))
         ws.append_row(headers)
