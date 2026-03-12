@@ -137,10 +137,6 @@ def call_claude(image_bytes, prompt):
     return text
 ```
 
-
-
----
-
 The function is still called `call_claude` internally — no other changes needed anywhere. Everything else stays identical.
 
 **Also add to Railway Variables:**
