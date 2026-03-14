@@ -248,9 +248,9 @@ def match_patient(name, phone, mrn, patients):
     """Match by MRN first, then name+phone, then name only."""
     name_clean = (name or "").strip().lower()
     phone_clean = re.sub(r"\D", "", phone or "")
-    mrn_clean = (mrn or "").strip()
+    mrn_clean   = str(mrn or "").strip()
     for p in patients:
-        if mrn_clean and mrn_clean == (p.get("mrn") or "").strip():
+        if mrn_clean and mrn_clean == str(p.get("mrn") or "").strip():
             return p.get("patient_id")
     for p in patients:
         if (phone_clean and len(phone_clean) >= 10 and
@@ -268,7 +268,7 @@ def upsert_patient(entry, visit_date):
     patients = ws.get_all_records()
     name  = (entry.get("patientName") or "").strip()
     phone = re.sub(r"\D", "", entry.get("phone") or "")
-    mrn   = (entry.get("patientId") or "").strip()
+    mrn  = str(entry.get("patientId") or "").strip()
     hosp  = (entry.get("hospital") or PRIMARY_HOSPITAL).strip()
     diag  = (entry.get("diagnosis") or "").strip()
     now   = datetime.now().isoformat()
@@ -370,9 +370,9 @@ def is_duplicate(entry, records):
     name = (entry.get("patientName") or "").strip().lower()
     dt   = entry.get("visitDate", "")
     hosp = (entry.get("hospital") or "").strip().lower()
-    mrn  = (entry.get("patientId") or "").strip()
+    mrn  = str(entry.get("patientId") or "").strip()
     for r in records:
-        if mrn and mrn == (r.get("mrn") or "").strip():
+        if mrn and mrn == str(r.get("mrn") or "").strip():
             if r.get("visit_date") == dt:
                 return True
         if (
